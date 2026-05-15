@@ -62,7 +62,7 @@ function App() {
 
 
   return (
-    <div className="flex">
+    <>
       <NotesList
         notes={filteredNotes}
         allTags={allTags}
@@ -79,7 +79,7 @@ function App() {
         note={activeNote}
         onUpdateNote={updateNote}
       />
-    </div>
+    </>
   )
 }
 

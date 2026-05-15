@@ -33,10 +33,10 @@ const ToolbarButton = ({
     onMouseDown={(e) => e.preventDefault()}
     onClick={onClick}
     title={title}
-    className={`p-2 rounded-md transition-colors ${
+    className={`p-1.5 rounded-md transition-colors ${
       isActive
-        ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200'
-        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-slate-100'
+        ? 'bg-slate-800 text-slate-200'
+        : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
     }`}
   >
     {children}
@@ -108,13 +108,13 @@ const Toolbar = ({ editor }: ToolbarProps) => {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-1 border-b border-slate-200 dark:border-slate-700 p-2 bg-white dark:bg-gray-800 rounded-t-xl">
+    <div className="flex items-center gap-1">
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBold().run()}
         isActive={editor.isActive('bold')}
         title="Bold"
       >
-        <Bold size={18} />
+        <Bold size={16} />
       </ToolbarButton>
       
       <ToolbarButton
@@ -122,7 +122,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         isActive={editor.isActive('italic')}
         title="Italic"
       >
-        <Italic size={18} />
+        <Italic size={16} />
       </ToolbarButton>
       
       <ToolbarButton
@@ -130,17 +130,17 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         isActive={editor.isActive('strike')}
         title="Strikethrough"
       >
-        <Strikethrough size={18} />
+        <Strikethrough size={16} />
       </ToolbarButton>
 
-      <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+      <div className="w-px h-4 bg-slate-700 mx-2"></div>
 
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         isActive={editor.isActive('heading', { level: 1 })}
         title="Heading 1"
       >
-        <Heading1 size={18} />
+        <Heading1 size={16} />
       </ToolbarButton>
 
       <ToolbarButton
@@ -148,17 +148,17 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         isActive={editor.isActive('heading', { level: 2 })}
         title="Heading 2"
       >
-        <Heading2 size={18} />
+        <Heading2 size={16} />
       </ToolbarButton>
 
-      <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+      <div className="w-px h-4 bg-slate-700 mx-2"></div>
 
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         isActive={editor.isActive('bulletList')}
         title="Bullet List"
       >
-        <List size={18} />
+        <List size={16} />
       </ToolbarButton>
 
       <ToolbarButton
@@ -166,7 +166,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         isActive={editor.isActive('orderedList')}
         title="Ordered List"
       >
-        <ListOrdered size={18} />
+        <ListOrdered size={16} />
       </ToolbarButton>
       
       <ToolbarButton
@@ -174,7 +174,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         isActive={editor.isActive('taskList', { strikethrough: false })}
         title="Normal Task List"
       >
-        <CheckSquare size={18} />
+        <CheckSquare size={16} />
       </ToolbarButton>
 
       <ToolbarButton
@@ -182,10 +182,10 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         isActive={editor.isActive('taskList', { strikethrough: true })}
         title="Strikethrough Task List"
       >
-        <ListChecks size={18} />
+        <ListChecks size={16} />
       </ToolbarButton>
 
-      <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+      <div className="w-px h-4 bg-slate-700 mx-2"></div>
 
       {/* Color Picker */}
       <div className="relative">
@@ -194,20 +194,20 @@ const Toolbar = ({ editor }: ToolbarProps) => {
           onMouseDown={(e) => e.preventDefault()}
           onClick={toggleColorPicker}
           title="Text Color"
-          className="p-2 rounded-md transition-colors text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-slate-100 flex items-center gap-1"
+          className="p-1.5 rounded-md transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200 flex items-center gap-1"
         >
-          <Palette size={18} />
+          <Palette size={16} />
         </button>
 
         {isColorPickerOpen && (
-          <div className="absolute top-full mt-1 left-0 z-10 bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 shadow-lg rounded-lg p-2 flex gap-1">
+          <div className="absolute top-full mt-2 right-0 z-50 bg-slate-800 border border-slate-700 shadow-xl rounded-lg p-2 flex gap-1">
             {colors.map((color) => (
               <button
                 type="button"
                 onMouseDown={(e) => e.preventDefault()}
                 key={color.value}
                 onClick={() => handleColorChange(color.value)}
-                className="w-6 h-6 rounded-full border border-slate-200 hover:scale-110 transition-transform"
+                className="w-5 h-5 rounded-full border border-slate-600 hover:scale-110 transition-transform"
                 style={{ backgroundColor: color.value }}
                 title={color.name}
               />
@@ -216,7 +216,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
                 type="button"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => editor.chain().focus().unsetColor().run()}
-                className="w-6 h-6 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-800 hover:scale-110 transition-transform flex items-center justify-center text-xs text-slate-400 dark:text-slate-500"
+                className="w-5 h-5 rounded-full border border-slate-600 bg-slate-900 hover:scale-110 transition-transform flex items-center justify-center text-[10px] text-slate-400"
                 title="Reset Color"
             >
                 ✕
