@@ -36,6 +36,12 @@
     outline: none;
 }
 
+/* Fix color extension for bold text overridden by prose styles */
+.prose strong,
+.prose-invert strong {
+    color: inherit;
+}
+
 /* Task List Styles */
 ul[data-type="taskList"] {
   list-style: none;
