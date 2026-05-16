@@ -72,11 +72,14 @@ const Toolbar = ({ editor }: ToolbarProps) => {
 
   const colors = [
     { name: 'Black', value: '#000000' },
+    { name: 'White', value: '#ffffff' },
     { name: 'Red', value: '#ef4444' },
-    { name: 'Blue', value: '#3b82f6' },
-    { name: 'Green', value: '#22c55e' },
-    { name: 'Purple', value: '#a855f7' },
+    { name: 'Rose', value: '#f43f5e' },
     { name: 'Orange', value: '#f97316' },
+    { name: 'Yellow', value: '#eab308' },
+    { name: 'Green', value: '#22c55e' },
+    { name: 'Blue', value: '#3b82f6' },
+    { name: 'Purple', value: '#a855f7' },
     { name: 'Gray', value: '#64748b' }
   ];
 

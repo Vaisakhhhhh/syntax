@@ -57,7 +57,7 @@ function NoteEditor({ note, onUpdateNote }: Props) {
         },
         editorProps: {
             attributes: {
-                class: 'outline-none',
+                class: 'outline-none min-h-[500px] cursor-text',
             },
         },
     });
@@ -128,7 +128,7 @@ function NoteEditor({ note, onUpdateNote }: Props) {
         <main className="flex-1 flex flex-col bg-slate-900 relative min-w-0">
             {/* Redesigned Top Bar with Integrated Toolbar */}
             <header className="h-14 border-b border-slate-800 flex items-center px-6 justify-between bg-slate-900/95 sticky top-0 z-10 backdrop-blur-sm shrink-0">
-                
+
                 {/* Left side: Document Meta / Tags */}
                 <div className="flex items-center gap-2 min-w-[120px] overflow-x-auto no-scrollbar py-2">
                     {note.tags.map(tag => (
@@ -136,9 +136,9 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                             key={tag}
                             className="px-2.5 py-1 rounded-full bg-slate-800 text-xs font-medium text-slate-300 border border-slate-700 flex items-center gap-1 group hover:bg-slate-700 transition-colors shrink-0"
                         >
-                            <Tag className="w-3 h-3 text-emerald-500" /> 
+                            <Tag className="w-3 h-3 text-emerald-500" />
                             {tag}
-                            <button 
+                            <button
                                 onClick={() => removeTag(tag)}
                                 className="opacity-0 group-hover:opacity-100 ml-1 text-slate-500 hover:text-red-400 transition-opacity"
                             >
@@ -146,7 +146,7 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                             </button>
                         </span>
                     ))}
-                    
+
                     {isAddingTag ? (
                         <input
                             autoFocus
@@ -184,12 +184,12 @@ function NoteEditor({ note, onUpdateNote }: Props) {
 
             {/* Editor Content */}
             <div className="flex-1 overflow-y-auto w-full">
-                <div className="max-w-4xl mx-auto p-8 lg:p-12 mt-4">
+                <div className="max-w-4xl mx-auto p-8 lg:p-12 lg:pb-0 mt-4">
                     <input
                         type="text"
                         value={note.title}
                         onChange={e => handleChange("title", e.target.value)}
-                        className="w-full bg-transparent text-4xl font-bold text-slate-100 focus:outline-none placeholder-slate-600 mb-8"
+                        className="w-full bg-transparent text-4xl font-bold text-slate-100 focus:outline-none placeholder-slate-600 mb-2"
                         placeholder="Note Title"
                     />
 
