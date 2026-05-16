@@ -19,7 +19,9 @@ export function useFilteredNotes({ notes, search, selectedTags }: Params) {
 
                 const matchesTag =
                     selectedTags.length === 0 ||
-                    selectedTags.every(tag => note.tags.includes(tag));
+                    selectedTags.every(selectedTag =>
+                        note.tags.some(tag => tag.value === selectedTag)
+                    );
 
                 return matchesSearch && matchesTag;
             })

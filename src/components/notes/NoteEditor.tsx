@@ -96,14 +96,15 @@ function NoteEditor({ note, onUpdateNote }: Props) {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            const value = tagInput.trim();
-            if (!value) {
+            const cleaned = tagInput.trim();
+            const normalized = cleaned.toLowerCase();
+            if (!normalized) {
                 setIsAddingTag(false);
                 return;
             }
 
             // Constraints: Max 20 chars, Max 5 tags
-            if (value.length > 20) {
+            if (normalized.length > 20) {
                 alert("Tag cannot exceed 20 characters");
                 return;
             }
@@ -115,10 +116,12 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                 return;
             }
 
-            if (!note.tags.includes(value)) {
+            const isExist = note.tags.find(tag => tag.value === normalized);
+
+            if (!isExist) {
                 onUpdateNote({
                     ...note,
-                    tags: [...note.tags, value],
+                    tags: [...note.tags, { value: normalized, label: cleaned }],
                 });
             }
             setTagInput("");
@@ -129,11 +132,11 @@ function NoteEditor({ note, onUpdateNote }: Props) {
         }
     };
 
-    const removeTag = (tag: string) => {
+    const removeTag = (tagValue: string) => {
         if (!note) return;
         onUpdateNote({
             ...note,
-            tags: note.tags.filter(t => t !== tag),
+            tags: note.tags.filter(t => t.value !== tagValue),
         });
     };
 
@@ -146,13 +149,13 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                 <div className="flex items-center gap-2 min-w-[120px] overflow-x-auto no-scrollbar py-2">
                     {note.tags.map(tag => (
                         <span
-                            key={tag}
+                            key={tag.value}
                             className="px-2.5 py-1 rounded-full bg-slate-800 text-xs font-medium text-slate-300 border border-slate-700 flex items-center gap-1 group hover:bg-slate-700 transition-colors shrink-0"
                         >
                             <Tag className="w-3 h-3 text-emerald-500" />
-                            {tag}
+                            {tag.label}
                             <button
-                                onClick={() => removeTag(tag)}
+                                onClick={() => removeTag(tag.value)}
                                 className="opacity-0 group-hover:opacity-100 ml-1 text-slate-500 hover:text-red-400 transition-opacity"
                             >
                                 <X className="w-3 h-3" />

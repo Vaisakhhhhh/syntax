@@ -75,7 +75,7 @@ function NotesList({
                     <div className="w-8 h-8 bg-emerald-600 rounded flex items-center justify-center font-bold text-white">S</div>
                     <h1 className="font-semibold text-lg tracking-wide text-slate-100">Syntax</h1>
                 </div>
-                <button 
+                <button
                     onClick={toggleTheme}
                     className="p-2 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors"
                 >
@@ -95,8 +95,8 @@ function NotesList({
 
                 <div className="relative">
                     <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         placeholder="Search notes..."
                         value={search}
                         onChange={(e) => onSearchNote(e.target.value)}
@@ -106,7 +106,7 @@ function NotesList({
 
                 <div className="flex items-center gap-2 text-xs font-medium text-slate-500 uppercase tracking-wider relative" ref={dropdownRef}>
                     <span>Recent Notes</span>
-                    
+
                     <div className="ml-auto flex items-center gap-1">
                         {selectedTags.length > 0 && (
                             <span className="bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded text-[10px]">
@@ -124,7 +124,7 @@ function NotesList({
                             <div className="flex justify-between items-center mb-2 px-1">
                                 <span className="text-xs text-slate-400 capitalize">Filter by tags</span>
                                 {selectedTags.length > 0 && (
-                                    <button 
+                                    <button
                                         onClick={() => onChangeTags([])}
                                         className="text-[10px] text-red-400 hover:text-red-300 capitalize"
                                     >
@@ -167,7 +167,7 @@ function NotesList({
             <div className="flex-1 overflow-y-auto px-2 pb-4 space-y-1">
                 {notes.map(note => {
                     const isActive = note.id === activeNoteId;
-                    
+
                     // Plain text extraction
                     const doc = new DOMParser().parseFromString(note.content, 'text/html');
                     const plainText = doc.body.textContent || note.content || 'No content';
@@ -177,17 +177,16 @@ function NotesList({
                         <div
                             key={note.id}
                             onClick={() => onSelectNote(note.id)}
-                            className={`p-3 rounded-lg cursor-pointer group transition-colors border ${
-                                isActive 
-                                    ? "bg-emerald-500/10 border-emerald-500/20" 
-                                    : "hover:bg-slate-800 border-transparent"
-                            }`}
+                            className={`p-3 rounded-lg cursor-pointer group transition-colors border ${isActive
+                                ? "bg-emerald-500/10 border-emerald-500/20"
+                                : "hover:bg-slate-800 border-transparent"
+                                }`}
                         >
                             <div className="flex justify-between items-start mb-1">
                                 <h3 className={`font-medium truncate pr-4 ${isActive ? "text-emerald-400" : "text-slate-200"}`}>
                                     {note.title || "Untitled Note"}
                                 </h3>
-                                <button 
+                                <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         onDeleteNote(note.id);
@@ -207,7 +206,7 @@ function NotesList({
                                 {note.tags.length > 0 && (
                                     <div className="flex gap-1">
                                         {note.tags.slice(0, 2).map(tag => (
-                                            <span key={tag} className="w-1.5 h-1.5 rounded-full bg-slate-600" title={tag} />
+                                            <span key={tag.value} className="w-1.5 h-1.5 rounded-full bg-slate-600" title={tag.label} />
                                         ))}
                                         {note.tags.length > 2 && (
                                             <span className="w-1.5 h-1.5 rounded-full bg-slate-700" title={`+${note.tags.length - 2} more`} />
