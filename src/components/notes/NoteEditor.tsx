@@ -102,6 +102,19 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                 return;
             }
 
+            // Constraints: Max 20 chars, Max 5 tags
+            if (value.length > 20) {
+                alert("Tag cannot exceed 20 characters");
+                return;
+            }
+
+            if (note.tags.length >= 5) {
+                alert("Maximum 5 tags allowed per note");
+                setIsAddingTag(false);
+                setTagInput("");
+                return;
+            }
+
             if (!note.tags.includes(value)) {
                 onUpdateNote({
                     ...note,
@@ -148,19 +161,27 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                     ))}
 
                     {isAddingTag ? (
-                        <input
-                            autoFocus
-                            value={tagInput}
-                            onChange={(e) => setTagInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            onBlur={() => {
-                                setIsAddingTag(false);
-                                setTagInput("");
-                            }}
-                            className="bg-slate-800 border border-emerald-500 text-slate-200 text-xs rounded-full px-2.5 py-1 focus:outline-none w-24 shrink-0"
-                            placeholder="Add tag..."
-                        />
-                    ) : (
+                        <div className="flex items-center gap-2 bg-slate-800 border border-emerald-500 rounded-full px-2.5 py-1 shrink-0">
+                            <input
+                                autoFocus
+                                value={tagInput}
+                                onChange={(e) => setTagInput(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                maxLength={20}
+                                onBlur={() => {
+                                    if (!tagInput.trim()) {
+                                        setIsAddingTag(false);
+                                        setTagInput("");
+                                    }
+                                }}
+                                className="bg-transparent text-slate-200 text-xs focus:outline-none w-24"
+                                placeholder="Add tag..."
+                            />
+                            <span className="text-[10px] text-slate-500 font-mono">
+                                {tagInput.length}/20
+                            </span>
+                        </div>
+                    ) : note.tags.length < 5 && (
                         <button
                             onClick={() => setIsAddingTag(true)}
                             className="px-2 py-1 rounded-full text-xs font-medium text-slate-500 hover:text-slate-300 cursor-pointer flex items-center gap-1 shrink-0"
