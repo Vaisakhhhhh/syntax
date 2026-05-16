@@ -42,9 +42,19 @@ function App() {
 
   const updateNote = useCallback((updatedNote: Note) => {
     setNotes(prev =>
-      prev.map((note) =>
-        note.id === updatedNote.id ? updatedNote : note
-      )
+      prev.map((note) => {
+        if (note.id === updatedNote.id) {
+          const hasChanged =
+            note.title !== updatedNote.title ||
+            note.content !== updatedNote.content ||
+            JSON.stringify(note.tags) !== JSON.stringify(updatedNote.tags);
+
+          return hasChanged
+            ? { ...updatedNote, updatedAt: Date.now() }
+            : note;
+        }
+        return note;
+      })
     );
   }, [setNotes]);
 

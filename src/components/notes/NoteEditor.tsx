@@ -53,7 +53,10 @@ function NoteEditor({ note, onUpdateNote }: Props) {
         ],
         content: note?.content,
         onUpdate({ editor }) {
-            handleChange("content", editor.getHTML());
+            const newContent = editor.getHTML();
+            if (newContent !== note?.content && !(newContent === '<p></p>' && !note?.content)) {
+                handleChange("content", editor.getHTML());
+            }
         },
         editorProps: {
             attributes: {
@@ -86,7 +89,6 @@ function NoteEditor({ note, onUpdateNote }: Props) {
         onUpdateNote({
             ...note,
             [field]: value,
-            updatedAt: Date.now(),
         });
     };
 
@@ -104,7 +106,6 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                 onUpdateNote({
                     ...note,
                     tags: [...note.tags, value],
-                    updatedAt: Date.now(),
                 });
             }
             setTagInput("");
@@ -120,7 +121,6 @@ function NoteEditor({ note, onUpdateNote }: Props) {
         onUpdateNote({
             ...note,
             tags: note.tags.filter(t => t !== tag),
-            updatedAt: Date.now(),
         });
     };
 
