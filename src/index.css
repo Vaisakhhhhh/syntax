@@ -10,36 +10,37 @@
 /* Hide scrollbar for IE, Edge */
 .no-scrollbar {
   -ms-overflow-style: none;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* Custom scrollbar for a cleaner look */
 ::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 4px;
+  background: #334155;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+  background: #475569;
 }
 
 /* Ensure the editor content area outlines are hidden */
 [contenteditable]:focus {
-    outline: none;
+  outline: none;
 }
 
 /* Fix color extension for bold text overridden by prose styles */
 .prose strong,
 .prose-invert strong {
-    color: inherit;
+  color: inherit;
 }
 
 /* Task List Styles */
@@ -59,25 +60,70 @@ ul[data-type="taskList"] li {
   margin-bottom: 0.5rem;
 }
 
-ul[data-type="taskList"] li > label {
+ul[data-type="taskList"] li>label {
   flex: 0 0 auto;
   user-select: none;
   display: flex;
   align-items: center;
 }
 
-ul[data-type="taskList"] li > label input[type="checkbox"] {
-  @apply w-4 h-4 text-emerald-500 bg-slate-800 border-slate-700 rounded focus:ring-emerald-500 cursor-pointer;
+ul[data-type="taskList"] li>label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  background-color: #0f172a;
+  /* bg-slate-900 to match editor bg */
+  border: 2px solid #334155;
+  /* border-slate-700 */
+  border-radius: 0.25rem;
+  /* rounded */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+  margin: 0;
 }
 
-ul[data-type="taskList"] li > div {
+ul[data-type="taskList"] li>label input[type="checkbox"]:hover {
+  border-color: #10b981;
+  /* border-emerald-500 */
+  background-color: #1e293b;
+  /* bg-slate-800 */
+}
+
+ul[data-type="taskList"] li>label input[type="checkbox"]:checked {
+  background-color: #10b981;
+  /* bg-emerald-500 */
+  border-color: #10b981;
+}
+
+ul[data-type="taskList"] li>label input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1.5px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+ul[data-type="taskList"] li>label input[type="checkbox"]:focus-visible {
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+}
+
+ul[data-type="taskList"] li>div {
   flex: 1 1 auto;
 }
 
 /* Strikethrough checked tasks */
-ul[data-type="taskList"].strikethrough-list li[data-checked="true"] > div {
+ul[data-type="taskList"].strikethrough-list li[data-checked="true"]>div {
   text-decoration: line-through;
   color: #9ca3af;
   transition: all 0.2s ease-in-out;
 }
-

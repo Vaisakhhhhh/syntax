@@ -6,7 +6,7 @@ import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Tag, PlusCircle, X } from 'lucide-react';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Note } from "../../types/note";
 
 import Toolbar from './Toolbar';
@@ -39,6 +39,16 @@ type Props = {
 function NoteEditor({ note, onUpdateNote }: Props) {
     const [tagInput, setTagInput] = useState("");
     const [isAddingTag, setIsAddingTag] = useState(false);
+    const titleRef = useRef<HTMLTextAreaElement>(null);
+    const editorRef = useRef<any>(null);
+
+    const adjustHeight = () => {
+        const textarea = titleRef.current;
+        if (textarea) {
+            textarea.style.height = "auto";
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+    };
 
     //^ Initialize Tiptap editor
     const editor = useEditor({
@@ -60,8 +70,45 @@ function NoteEditor({ note, onUpdateNote }: Props) {
         },
         editorProps: {
             attributes: {
-                class: 'outline-none min-h-[500px] cursor-text',
+                class: 'outline-none flex-1 cursor-text pb-32',
             },
+            handleKeyDown(view, event) {
+                if (event.key === 'Backspace') {
+                    const { state } = view;
+                    const { selection } = state;
+                    const { $from, empty } = selection;
+
+                    // Detect empty selection at the start of the block
+                    if (empty && $from.parentOffset === 0) {
+                        const parent = $from.parent;
+                        
+                        // Detect if current paragraph inside the list item is empty
+                        if (parent.content.size === 0) {
+                            const grandParent = $from.node(-1);
+                            if (grandParent) {
+                                if (grandParent.type.name === 'taskItem') {
+                                    editorRef.current?.commands.toggleTaskList();
+                                    return true;
+                                }
+                                if (grandParent.type.name === 'listItem') {
+                                    const greatGrandParent = $from.node(-2);
+                                    if (greatGrandParent) {
+                                        if (greatGrandParent.type.name === 'bulletList') {
+                                            editorRef.current?.commands.toggleBulletList();
+                                            return true;
+                                        }
+                                        if (greatGrandParent.type.name === 'orderedList') {
+                                            editorRef.current?.commands.toggleOrderedList();
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
         },
     });
 
@@ -71,6 +118,16 @@ function NoteEditor({ note, onUpdateNote }: Props) {
             editor.commands.setContent(note.content || '');
         }
     }, [editor, note?.id]);
+
+    // Adjust height on note change or title change
+    useEffect(() => {
+        adjustHeight();
+    }, [note?.id, note?.title]);
+
+    // Sync editor ref for keyboard handler closures
+    useEffect(() => {
+        editorRef.current = editor;
+    }, [editor]);
 
 
     if (!note) {
@@ -83,6 +140,13 @@ function NoteEditor({ note, onUpdateNote }: Props) {
             </div>
         );
     }
+
+    const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            editor?.commands.focus('start');
+        }
+    };
 
     //^ Handle content changes
     const handleChange = (field: "title" | "content", value: string) => {
@@ -164,7 +228,11 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                     ))}
 
                     {isAddingTag ? (
-                        <div className="flex items-center gap-2 bg-slate-800 border border-emerald-500 rounded-full px-2.5 py-1 shrink-0">
+                        <div className={`flex items-center gap-2 bg-slate-800 border rounded-full px-2.5 py-1 shrink-0 transition-colors ${
+                            tagInput.trim() !== "" && note.tags.some(t => t.value === tagInput.trim().toLowerCase())
+                                ? 'border-red-500'
+                                : 'border-emerald-500'
+                        }`}>
                             <input
                                 autoFocus
                                 value={tagInput}
@@ -207,18 +275,20 @@ function NoteEditor({ note, onUpdateNote }: Props) {
             </div>
 
             {/* Editor Content */}
-            <div className="flex-1 overflow-y-auto w-full">
-                <div className="max-w-4xl mx-auto p-8 lg:p-12 lg:pb-0 mt-4">
-                    <input
-                        type="text"
+            <div className="flex-1 overflow-y-auto w-full flex flex-col">
+                <div className="max-w-4xl mx-auto p-8 lg:p-12 lg:pb-0 mt-4 flex-1 flex flex-col w-full">
+                    <textarea
+                        ref={titleRef}
                         value={note.title}
                         onChange={e => handleChange("title", e.target.value)}
-                        className="w-full bg-transparent text-4xl font-bold text-slate-100 focus:outline-none placeholder-slate-600 mb-2"
+                        onKeyDown={handleTitleKeyDown}
+                        rows={1}
+                        className="w-full bg-transparent text-4xl font-bold text-slate-100 focus:outline-none placeholder-slate-600 mb-2 resize-none overflow-hidden"
                         placeholder="Note Title"
                     />
 
-                    <div className="prose prose-invert max-w-none text-slate-300 leading-relaxed outline-none">
-                        <EditorContent editor={editor} />
+                    <div className="prose prose-invert max-w-none text-slate-300 leading-relaxed outline-none flex-1 flex flex-col">
+                        <EditorContent editor={editor} className="flex-1 flex flex-col" />
                     </div>
                 </div>
             </div>
