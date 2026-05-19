@@ -127,3 +127,8 @@ ul[data-type="taskList"].strikethrough-list li[data-checked="true"]>div {
   color: #9ca3af;
   transition: all 0.2s ease-in-out;
 }
+
+/* Hide caret during checkbox interaction to avoid cursor flicker */
+.ProseMirror.hide-caret {
+  caret-color: transparent !important;
+}

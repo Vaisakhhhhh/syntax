@@ -72,6 +72,7 @@ function NoteEditor({ note, onUpdateNote }: Props) {
             attributes: {
                 class: 'outline-none flex-1 cursor-text pb-32',
             },
+
             handleKeyDown(view, event) {
                 if (event.key === 'Backspace') {
                     const { state } = view;
@@ -127,6 +128,50 @@ function NoteEditor({ note, onUpdateNote }: Props) {
     // Sync editor ref for keyboard handler closures
     useEffect(() => {
         editorRef.current = editor;
+    }, [editor]);
+
+    // Prevent text cursor from showing when clicking checkboxes (runs in native DOM capture phase)
+    useEffect(() => {
+        if (!editor) return;
+
+        let wasFocused = false;
+
+        const handleCheckboxMouseEvent = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            const isCheckboxOrLabel = 
+                target.closest('input[type="checkbox"]') || 
+                target.closest('li[data-type="taskItem"] > label');
+
+            if (isCheckboxOrLabel) {
+                if (e.type === 'mousedown') {
+                    wasFocused = editor.isFocused;
+                    // Visually hide the vertical blinking caret by making it transparent
+                    editor.view.dom.classList.add('hide-caret');
+                }
+
+                if (e.type === 'click') {
+                    // Let the native click flow so Tiptap toggles the checkbox perfectly!
+                    // Then, clean up the focus and restore cursor visibility after the update completes
+                    setTimeout(() => {
+                        if (!wasFocused) {
+                            editorRef.current?.commands.blur();
+                        }
+                        editorRef.current?.view.dom.classList.remove('hide-caret');
+                    }, 150);
+                }
+            }
+        };
+
+        const dom = editor.view.dom;
+        dom.addEventListener('mousedown', handleCheckboxMouseEvent, { capture: true });
+        dom.addEventListener('mouseup', handleCheckboxMouseEvent, { capture: true });
+        dom.addEventListener('click', handleCheckboxMouseEvent, { capture: true });
+
+        return () => {
+            dom.removeEventListener('mousedown', handleCheckboxMouseEvent, { capture: true });
+            dom.removeEventListener('mouseup', handleCheckboxMouseEvent, { capture: true });
+            dom.removeEventListener('click', handleCheckboxMouseEvent, { capture: true });
+        };
     }, [editor]);
 
 
