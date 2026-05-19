@@ -3,7 +3,7 @@ import type { Dispatch, SetStateAction } from "react";
 import type { Note } from "../../types/note";
 import React from "react";
 import { useTheme } from "../../context/useTheme";
-import { Plus, Search, Filter, Trash2, Sun, Moon } from "lucide-react";
+import { Plus, Search, Filter, Trash2, Sun, Moon, Tag } from "lucide-react";
 
 type Props = {
     notes: Note[];
@@ -16,6 +16,41 @@ type Props = {
     onCreateNote: () => void;
     onDeleteNote: (id: string) => void;
     onChangeTags: Dispatch<SetStateAction<string[]>>;
+};
+
+// Helper function to extract text contents from HTML, adding space between block elements and filtering raw empty tags
+const getSpacedPlainText = (html: string): string => {
+    if (!html) return 'No content';
+
+    // Remove empty paragraph blocks (e.g. <p></p> or <p> </p>) to prevent raw HTML leak
+    const cleanHtml = html.replace(/<p>\s*<\/p>/g, '').trim();
+    if (!cleanHtml) return 'No content';
+
+    const doc = new DOMParser().parseFromString(cleanHtml, 'text/html');
+
+    const walk = (node: Node): string => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            return node.textContent || '';
+        }
+
+        let text = '';
+        const children = node.childNodes;
+        for (let i = 0; i < children.length; i++) {
+            const childText = walk(children[i]);
+            if (childText.trim()) {
+                const nodeName = children[i].nodeName;
+                const isBlock = ['P', 'LI', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL'].includes(nodeName);
+                if (isBlock && text) {
+                    text += ' ' + childText.trim();
+                } else {
+                    text += childText;
+                }
+            }
+        }
+        return text;
+    };
+
+    return walk(doc.body).trim() || 'No content';
 };
 
 function NotesList({
@@ -168,9 +203,8 @@ function NotesList({
                 {notes.map(note => {
                     const isActive = note.id === activeNoteId;
 
-                    // Plain text extraction
-                    const doc = new DOMParser().parseFromString(note.content, 'text/html');
-                    const plainText = doc.body.textContent || note.content || 'No content';
+                    // Plain text extraction with correct block element spacing
+                    const plainText = getSpacedPlainText(note.content);
                     const previewText = plainText.length > 50 ? plainText.substring(0, 50) + '...' : plainText;
 
                     return (
@@ -199,20 +233,36 @@ function NotesList({
                             <p className={`text-xs truncate ${isActive ? "text-slate-400" : "text-slate-500"}`}>
                                 {previewText}
                             </p>
-                            <div className="flex items-center justify-between mt-2">
-                                <div className={`text-[10px] ${isActive ? "text-slate-500" : "text-slate-600"}`}>
-                                    {formatDate(note.updatedAt)}
-                                </div>
+                            <div className="flex items-center mt-2 gap-2 w-full min-w-0">
                                 {note.tags.length > 0 && (
-                                    <div className="flex gap-1">
+                                    <div className="flex gap-1 items-center flex-nowrap overflow-hidden min-w-0 flex-1">
                                         {note.tags.slice(0, 2).map(tag => (
-                                            <span key={tag.value} className="w-1.5 h-1.5 rounded-full bg-slate-600" title={tag.label} />
+                                            <span
+                                                key={tag.value}
+                                                className={`px-2 py-0.5 rounded-full text-[9px] font-medium border flex items-center shrink min-w-0 max-w-[80px] ${isActive
+                                                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                                                    : "bg-slate-800 text-slate-300 border-slate-700"
+                                                    }`}
+                                            >
+                                                <span className="truncate">{tag.label}</span>
+                                            </span>
                                         ))}
                                         {note.tags.length > 2 && (
-                                            <span className="w-1.5 h-1.5 rounded-full bg-slate-700" title={`+${note.tags.length - 2} more`} />
+                                            <span
+                                                className={`px-1.5 py-0.5 rounded-full text-[9px] font-medium border shrink-0 ${isActive
+                                                    ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                                                    : "bg-slate-800 text-slate-500 border-slate-700"
+                                                    }`}
+                                                title={note.tags.slice(2).map(tag => `• ${tag.label}`).join("\n")}
+                                            >
+                                                +{note.tags.length - 2}
+                                            </span>
                                         )}
                                     </div>
                                 )}
+                                <div className={`text-[10px] whitespace-nowrap ml-auto shrink-0 ${isActive ? "text-slate-400" : "text-slate-500"}`}>
+                                    {formatDate(note.updatedAt)}
+                                </div>
                             </div>
                         </div>
                     );
