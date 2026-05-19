@@ -177,9 +177,9 @@ function NoteEditor({ note, onUpdateNote }: Props) {
 
     if (!note) {
         return (
-            <div className="flex-1 flex flex-col items-center justify-center bg-slate-900 text-slate-500 relative">
-                <div className="w-16 h-16 mb-4 rounded-full bg-slate-800 flex items-center justify-center">
-                    <Tag className="w-8 h-8 text-slate-600" />
+            <div className="flex-1 flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 relative">
+                <div className="w-16 h-16 mb-4 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                    <Tag className="w-8 h-8 text-slate-400 dark:text-slate-600" />
                 </div>
                 <p>Select or create a note</p>
             </div>
@@ -250,22 +250,22 @@ function NoteEditor({ note, onUpdateNote }: Props) {
     };
 
     return (
-        <main className="flex-1 flex flex-col bg-slate-900 relative min-w-0">
+        <main className="flex-1 flex flex-col bg-white dark:bg-slate-900 relative min-w-0">
             {/* Redesigned Top Bar with Integrated Toolbar */}
-            <header className="h-14 border-b border-slate-800 flex items-center px-6 justify-between bg-slate-900/95 sticky top-0 z-10 backdrop-blur-sm shrink-0">
+            <header className="h-14 border-b border-slate-200 dark:border-slate-800 flex items-center px-6 justify-between bg-white/95 dark:bg-slate-900/95 sticky top-0 z-10 backdrop-blur-sm shrink-0">
 
                 {/* Left side: Document Meta / Tags */}
                 <div className="flex items-center gap-2 min-w-[120px] overflow-x-auto no-scrollbar py-2">
                     {note.tags.map(tag => (
                         <span
                             key={tag.value}
-                            className="px-2.5 py-1 rounded-full bg-slate-800 text-xs font-medium text-slate-300 border border-slate-700 flex items-center gap-1 group hover:bg-slate-700 transition-colors shrink-0"
+                            className="px-2.5 py-1 rounded-full bg-slate-100 text-xs font-medium text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 flex items-center gap-1 group hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0"
                         >
                             <Tag className="w-3 h-3 text-emerald-500" />
                             {tag.label}
                             <button
                                 onClick={() => removeTag(tag.value)}
-                                className="opacity-0 group-hover:opacity-100 ml-1 text-slate-500 hover:text-red-400 transition-opacity"
+                                className="opacity-0 group-hover:opacity-100 ml-1 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-opacity"
                             >
                                 <X className="w-3 h-3" />
                             </button>
@@ -273,7 +273,7 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                     ))}
 
                     {isAddingTag ? (
-                        <div className={`flex items-center gap-2 bg-slate-800 border rounded-full px-2.5 py-1 shrink-0 transition-colors ${
+                        <div className={`flex items-center gap-2 bg-slate-100 border rounded-full px-2.5 py-1 shrink-0 transition-colors ${
                             tagInput.trim() !== "" && note.tags.some(t => t.value === tagInput.trim().toLowerCase())
                                 ? 'border-red-500'
                                 : 'border-emerald-500'
@@ -290,7 +290,7 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                                         setTagInput("");
                                     }
                                 }}
-                                className="bg-transparent text-slate-200 text-xs focus:outline-none w-24"
+                                className="bg-transparent text-slate-800 dark:text-slate-200 text-xs focus:outline-none w-24"
                                 placeholder="Add tag..."
                             />
                             <span className="text-[10px] text-slate-500 font-mono">
@@ -300,7 +300,7 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                     ) : note.tags.length < 5 && (
                         <button
                             onClick={() => setIsAddingTag(true)}
-                            className="px-2 py-1 rounded-full text-xs font-medium text-slate-500 hover:text-slate-300 cursor-pointer flex items-center gap-1 shrink-0"
+                            className="px-2 py-1 rounded-full text-xs font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 cursor-pointer flex items-center gap-1 shrink-0"
                             title="Add Tag"
                         >
                             <PlusCircle className="w-4 h-4" /> Add tag
@@ -315,7 +315,7 @@ function NoteEditor({ note, onUpdateNote }: Props) {
             </header>
 
             {/* Mobile toolbar */}
-            <div className="md:hidden border-b border-slate-800 p-2 overflow-x-auto bg-slate-900 shrink-0">
+            <div className="md:hidden border-b border-slate-200 dark:border-slate-800 p-2 overflow-x-auto bg-white dark:bg-slate-900 shrink-0">
                 <Toolbar editor={editor} />
             </div>
 
@@ -328,11 +328,11 @@ function NoteEditor({ note, onUpdateNote }: Props) {
                         onChange={e => handleChange("title", e.target.value)}
                         onKeyDown={handleTitleKeyDown}
                         rows={1}
-                        className="w-full bg-transparent text-4xl font-bold text-slate-100 focus:outline-none placeholder-slate-600 mb-2 resize-none overflow-hidden"
+                        className="w-full bg-transparent text-4xl font-bold text-slate-900 dark:text-slate-100 focus:outline-none placeholder-slate-300 dark:placeholder-slate-700 mb-2 resize-none overflow-hidden"
                         placeholder="Note Title"
                     />
 
-                    <div className="prose prose-invert max-w-none text-slate-300 leading-relaxed outline-none flex-1 flex flex-col">
+                    <div className="prose dark:prose-invert max-w-none text-slate-800 dark:text-slate-300 leading-relaxed outline-none flex-1 flex flex-col">
                         <EditorContent editor={editor} className="flex-1 flex flex-col" />
                     </div>
                 </div>
