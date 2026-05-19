@@ -59,16 +59,13 @@ function App() {
   }, [setNotes]);
 
   const deleteNote = useCallback((id: string) => {
-    setNotes(prev => {
-      const newNotes = prev.filter((note) => note.id !== id);
+    setNotes(prev => prev.filter((note) => note.id !== id));
 
-      if (id === activeNoteId) {
-        setActiveNoteId(newNotes[0]?.id || null);
-      }
-
-      return newNotes;
-    });
-  }, [setNotes, activeNoteId]);
+    if (id === activeNoteId) {
+      const remainingVisibleNotes = filteredNotes.filter(note => note.id !== id);
+      setActiveNoteId(remainingVisibleNotes[0]?.id || null);
+    }
+  }, [setNotes, activeNoteId, filteredNotes]);
 
 
   return (

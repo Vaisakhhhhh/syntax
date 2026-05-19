@@ -107,8 +107,8 @@ function NotesList({
             {/* Sidebar Header */}
             <div className="p-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-emerald-600 rounded flex items-center justify-center font-bold text-white">S</div>
-                    <h1 className="font-semibold text-lg tracking-wide text-slate-800 dark:text-slate-100">Syntax</h1>
+                    <img src="/logo.png" alt="logo" className="w-7" />
+                    <h1 className="font-bold text-lg tracking-wide text-emerald-600 dark:text-slate-100">Syntax</h1>
                 </div>
                 <button
                     onClick={toggleTheme}
