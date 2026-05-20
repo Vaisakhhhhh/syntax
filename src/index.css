@@ -10,68 +10,45 @@
 /* Hide scrollbar for IE, Edge */
 .no-scrollbar {
   -ms-overflow-style: none;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
-
-/* Tiptap Editor Styles */
-.ProseMirror {
-  @apply min-h-[400px] p-6 outline-none;
+/* Custom scrollbar for a cleaner look */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-.ProseMirror > * + * {
-  margin-top: 0.75em;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.ProseMirror ul,
-.ProseMirror ol {
-  padding-left: 1.5rem;
-  @apply list-outside;
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
 }
 
-.ProseMirror ul {
-  @apply list-disc;
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-.ProseMirror ol {
-  @apply list-decimal;
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
 }
 
-.ProseMirror li > p {
-  margin-top: 0.25em;
-  margin-bottom: 0.25em;
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
-.ProseMirror h1 {
-  @apply text-3xl font-bold mt-6 mb-4;
+/* Ensure the editor content area outlines are hidden */
+[contenteditable]:focus {
+  outline: none;
 }
 
-.ProseMirror h2 {
-  @apply text-2xl font-semibold mt-5 mb-3;
-}
-
-.ProseMirror h3 {
-  @apply text-xl font-medium mt-4 mb-2;
-}
-
-.ProseMirror code {
-  @apply bg-slate-100 rounded px-1.5 py-0.5 font-mono text-sm text-pink-600;
-}
-
-.ProseMirror pre {
-  @apply bg-slate-900 text-slate-50 rounded-lg p-4 font-mono text-sm overflow-x-auto;
-}
-
-.ProseMirror pre code {
-  @apply bg-transparent text-inherit p-0;
-}
-
-.ProseMirror blockquote {
-  @apply border-l-4 border-slate-300 pl-4 italic text-slate-600 my-4;
-}
-
-.ProseMirror hr {
-  @apply border-slate-200 my-6;
+/* Fix color extension for bold text overridden by prose styles */
+.prose strong,
+.prose-invert strong {
+  color: inherit;
 }
 
 /* Task List Styles */
@@ -91,25 +68,78 @@ ul[data-type="taskList"] li {
   margin-bottom: 0.5rem;
 }
 
-ul[data-type="taskList"] li > label {
+ul[data-type="taskList"] li>label {
   flex: 0 0 auto;
   user-select: none;
   display: flex;
   align-items: center;
 }
 
-ul[data-type="taskList"] li > label input[type="checkbox"] {
-  @apply w-4 h-4 text-indigo-600 bg-slate-100 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer;
+ul[data-type="taskList"] li>label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  background-color: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+  margin: 0;
 }
 
-ul[data-type="taskList"] li > div {
+.dark ul[data-type="taskList"] li>label input[type="checkbox"] {
+  background-color: #0f172a;
+  border-color: #334155;
+}
+
+ul[data-type="taskList"] li>label input[type="checkbox"]:hover {
+  border-color: #10b981;
+  background-color: #f8fafc;
+}
+
+.dark ul[data-type="taskList"] li>label input[type="checkbox"]:hover {
+  background-color: #1e293b;
+}
+
+ul[data-type="taskList"] li>label input[type="checkbox"]:checked {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+ul[data-type="taskList"] li>label input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1.5px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+ul[data-type="taskList"] li>label input[type="checkbox"]:focus-visible {
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+}
+
+ul[data-type="taskList"] li>div {
   flex: 1 1 auto;
 }
 
 /* Strikethrough checked tasks */
-ul[data-type="taskList"].strikethrough-list li[data-checked="true"] > div {
+ul[data-type="taskList"].strikethrough-list li[data-checked="true"]>div {
   text-decoration: line-through;
   color: #9ca3af;
   transition: all 0.2s ease-in-out;
 }
 
+/* Hide caret during checkbox interaction to avoid cursor flicker */
+.ProseMirror.hide-caret {
+  caret-color: transparent !important;
+}

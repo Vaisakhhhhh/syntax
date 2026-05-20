@@ -42,27 +42,34 @@ function App() {
 
   const updateNote = useCallback((updatedNote: Note) => {
     setNotes(prev =>
-      prev.map((note) =>
-        note.id === updatedNote.id ? updatedNote : note
-      )
+      prev.map((note) => {
+        if (note.id === updatedNote.id) {
+          const hasChanged =
+            note.title !== updatedNote.title ||
+            note.content !== updatedNote.content ||
+            JSON.stringify(note.tags) !== JSON.stringify(updatedNote.tags);
+
+          return hasChanged
+            ? { ...updatedNote, updatedAt: Date.now() }
+            : note;
+        }
+        return note;
+      })
     );
   }, [setNotes]);
 
   const deleteNote = useCallback((id: string) => {
-    setNotes(prev => {
-      const newNotes = prev.filter((note) => note.id !== id);
+    setNotes(prev => prev.filter((note) => note.id !== id));
 
-      if (id === activeNoteId) {
-        setActiveNoteId(newNotes[0]?.id || null);
-      }
-
-      return newNotes;
-    });
-  }, [setNotes, activeNoteId]);
+    if (id === activeNoteId) {
+      const remainingVisibleNotes = filteredNotes.filter(note => note.id !== id);
+      setActiveNoteId(remainingVisibleNotes[0]?.id || null);
+    }
+  }, [setNotes, activeNoteId, filteredNotes]);
 
 
   return (
-    <div className="flex">
+    <>
       <NotesList
         notes={filteredNotes}
         allTags={allTags}
@@ -79,7 +86,7 @@ function App() {
         note={activeNote}
         onUpdateNote={updateNote}
       />
-    </div>
+    </>
   )
 }
 
