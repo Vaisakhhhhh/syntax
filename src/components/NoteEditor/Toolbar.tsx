@@ -33,7 +33,7 @@ const ToolbarButton = ({
     onMouseDown={(e) => e.preventDefault()}
     onClick={onClick}
     title={title}
-    className={`p-1.5 rounded-md transition-colors ${
+    className={`p-1 md:p-1.5 rounded-md transition-colors ${
       isActive
         ? 'bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-slate-200'
         : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-200'
@@ -136,7 +136,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         <Strikethrough size={16} />
       </ToolbarButton>
 
-      <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-2"></div>
+      <div className="hidden md:block w-px h-4 bg-slate-200 dark:bg-slate-700 mx-2"></div>
 
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -154,7 +154,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         <Heading2 size={16} />
       </ToolbarButton>
 
-      <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-2"></div>
+      <div className="hidden md:block w-px h-4 bg-slate-200 dark:bg-slate-700 mx-2"></div>
 
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -188,7 +188,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         <ListChecks size={16} />
       </ToolbarButton>
 
-      <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-2"></div>
+      <div className="hidden md:block w-px h-4 bg-slate-200 dark:bg-slate-700 mx-2"></div>
 
       {/* Color Picker */}
       <div className="relative">
@@ -197,7 +197,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
           onMouseDown={(e) => e.preventDefault()}
           onClick={toggleColorPicker}
           title="Text Color"
-          className="p-1.5 rounded-md transition-colors text-slate-500 dark:text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-200 flex items-center gap-1"
+          className="p-1 md:p-1.5 rounded-md transition-colors text-slate-500 dark:text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-200 flex items-center gap-1"
         >
           <Palette size={16} />
         </button>

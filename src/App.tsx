@@ -28,8 +28,15 @@ function App() {
 
 
   const createNote = useCallback(() => {
+    let newId = "";
+    try {
+      newId = window.crypto.randomUUID();
+    } catch (e) {
+      newId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    }
+
     const newNote: Note = {
-      id: crypto.randomUUID(),
+      id: newId,
       title: "Untitled Note",
       content: "",
       tags: [],
@@ -85,6 +92,7 @@ function App() {
       <NoteEditor
         note={activeNote}
         onUpdateNote={updateNote}
+        onBack={() => setActiveNoteId(null)}
       />
     </>
   )

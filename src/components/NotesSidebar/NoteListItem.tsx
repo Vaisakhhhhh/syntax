@@ -33,7 +33,7 @@ function NoteListItem({ note, isActive, onSelectNote, onDeleteNote }: Props) {
                         e.stopPropagation();
                         onDeleteNote(note.id);
                     }}
-                    className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-all shrink-0"
+                    className="opacity-100 md:opacity-0 md:group-hover:opacity-100 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-all shrink-0"
                 >
                     <Trash2 className="w-4 h-4" />
                 </button>

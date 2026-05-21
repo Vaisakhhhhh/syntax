@@ -1,5 +1,5 @@
 import { EditorContent } from '@tiptap/react';
-import { Tag } from 'lucide-react';
+import { Tag, ChevronLeft } from 'lucide-react';
 import { useRef, useEffect } from "react";
 import type { Note } from "../../types/note";
 
@@ -10,9 +10,10 @@ import { useTiptapEditor } from './useTiptapEditor';
 type Props = {
     note: Note | null;
     onUpdateNote: (note: Note) => void;
+    onBack?: () => void;
 };
 
-function NoteEditor({ note, onUpdateNote }: Props) {
+function NoteEditor({ note, onUpdateNote, onBack }: Props) {
     const titleRef = useRef<HTMLTextAreaElement>(null);
 
     const handleChange = (field: "title" | "content", value: string) => {
@@ -41,7 +42,7 @@ function NoteEditor({ note, onUpdateNote }: Props) {
 
     if (!note) {
         return (
-            <div className="flex-1 flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 relative">
+            <div className="hidden md:flex flex-1 flex-col items-center justify-center bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 relative">
                 <div className="w-16 h-16 mb-4 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                     <Tag className="w-8 h-8 text-slate-400 dark:text-slate-600" />
                 </div>
@@ -58,25 +59,40 @@ function NoteEditor({ note, onUpdateNote }: Props) {
     };
 
     return (
-        <main className="flex-1 flex flex-col bg-white dark:bg-slate-900 relative min-w-0">
-            {/* Redesigned Top Bar with Integrated Toolbar */}
-            <header className="h-14 border-b border-slate-200 dark:border-slate-800 flex items-center px-6 justify-between bg-white/95 dark:bg-slate-900/95 sticky top-0 z-10 backdrop-blur-sm shrink-0">
-                {/* Left side: Document Meta / Tags */}
-                <NoteHeader note={note} onUpdateNote={onUpdateNote} />
+        <main className={`flex-1 flex-col bg-white dark:bg-slate-900 relative min-w-0 overflow-hidden ${!note ? "hidden md:flex" : "flex"}`}>
+            
+            {/* Scrollable Container */}
+            <div className="flex-1 overflow-y-auto w-full flex flex-col relative">
+                
+                {/* Redesigned Top Bar with Integrated Toolbar */}
+                <header className="h-14 border-b border-slate-200 dark:border-slate-800 flex items-center px-6 justify-between bg-white/95 dark:bg-slate-900/95 sticky top-0 z-20 backdrop-blur-sm shrink-0 w-full">
+                    {/* Left side: Document Meta / Tags */}
+                    <div className="flex items-center min-w-0 flex-1">
+                        {onBack && (
+                            <button
+                                onClick={onBack}
+                                className="md:hidden mr-2 p-1.5 -ml-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 shrink-0"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                        )}
+                        <div className="min-w-0 flex-1 overflow-x-auto no-scrollbar">
+                            <NoteHeader note={note} onUpdateNote={onUpdateNote} />
+                        </div>
+                    </div>
 
-                {/* Center: Minimalist Formatting Toolbar */}
-                <div className="flex-shrink-0 ml-4 hidden md:block">
+                    {/* Center: Minimalist Formatting Toolbar */}
+                    <div className="flex-shrink-0 ml-4 hidden md:block">
+                        <Toolbar editor={editor} />
+                    </div>
+                </header>
+
+                {/* Mobile toolbar */}
+                <div className="md:hidden border-b border-slate-200 dark:border-slate-800 p-2 flex justify-center bg-white/95 dark:bg-slate-900/95 shrink-0 sticky top-14 z-20 backdrop-blur-sm w-full">
                     <Toolbar editor={editor} />
                 </div>
-            </header>
 
-            {/* Mobile toolbar */}
-            <div className="md:hidden border-b border-slate-200 dark:border-slate-800 p-2 overflow-x-auto bg-white dark:bg-slate-900 shrink-0">
-                <Toolbar editor={editor} />
-            </div>
-
-            {/* Editor Content */}
-            <div className="flex-1 overflow-y-auto w-full flex flex-col">
+                {/* Editor Content */}
                 <div className="max-w-4xl mx-auto p-8 lg:p-12 lg:pb-0 mt-4 flex-1 flex flex-col w-full">
                     <textarea
                         ref={titleRef}
