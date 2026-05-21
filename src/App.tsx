@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import type { Note } from "./types/note";
-import NotesList from "./components/notes/NotesList";
-import NoteEditor from "./components/notes/NoteEditor";
+import NotesSidebar from "./components/NotesSidebar/NotesSidebar";
+import NoteEditor from "./components/NoteEditor/NoteEditor";
 import { useNotes } from "./hooks/useNotes";
 import { useFilteredNotes } from "./hooks/useFilteredNotes";
 import { useAllTags } from "./hooks/useAllTags";
@@ -70,7 +70,7 @@ function App() {
 
   return (
     <>
-      <NotesList
+      <NotesSidebar
         notes={filteredNotes}
         allTags={allTags}
         activeNoteId={activeNoteId}
