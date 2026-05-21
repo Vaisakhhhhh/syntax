@@ -36,7 +36,7 @@ const ToolbarButton = ({
     className={`p-1 md:p-1.5 rounded-md transition-colors ${
       isActive
         ? 'bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-slate-200'
-        : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-200'
+        : 'text-slate-500 dark:text-slate-400 md:hover:bg-slate-100 md:hover:text-slate-900 dark:md:hover:bg-slate-800 dark:md:hover:text-slate-200'
     }`}
   >
     {children}
@@ -197,7 +197,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
           onMouseDown={(e) => e.preventDefault()}
           onClick={toggleColorPicker}
           title="Text Color"
-          className="p-1 md:p-1.5 rounded-md transition-colors text-slate-500 dark:text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-200 flex items-center gap-1"
+          className="p-1 md:p-1.5 rounded-md transition-colors text-slate-500 dark:text-slate-400 md:hover:bg-slate-100 md:hover:text-slate-900 dark:md:hover:bg-slate-800 dark:md:hover:text-slate-200 flex items-center gap-1"
         >
           <Palette size={16} />
         </button>
@@ -210,7 +210,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
                 onMouseDown={(e) => e.preventDefault()}
                 key={color.value}
                 onClick={() => handleColorChange(color.value)}
-                className="w-5 h-5 rounded-full border border-slate-350 dark:border-slate-600 hover:scale-110 transition-transform"
+                className="w-5 h-5 rounded-full border border-slate-350 dark:border-slate-600 md:hover:scale-110 transition-transform"
                 style={{ backgroundColor: color.value }}
                 title={color.name}
               />
@@ -219,7 +219,7 @@ const Toolbar = ({ editor }: ToolbarProps) => {
                 type="button"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => editor.chain().focus().unsetColor().run()}
-                className="w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-900 hover:scale-110 transition-transform flex items-center justify-center text-[10px] text-slate-500 dark:text-slate-400"
+                className="w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-900 md:hover:scale-110 transition-transform flex items-center justify-center text-[10px] text-slate-500 dark:text-slate-400"
                 title="Reset Color"
             >
                 ✕

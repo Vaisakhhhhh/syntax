@@ -61,38 +61,36 @@ function NoteEditor({ note, onUpdateNote, onBack }: Props) {
     return (
         <main className={`flex-1 flex-col bg-white dark:bg-slate-900 relative min-w-0 overflow-hidden ${!note ? "hidden md:flex" : "flex"}`}>
             
-            {/* Scrollable Container */}
-            <div className="flex-1 overflow-y-auto w-full flex flex-col relative">
-                
-                {/* Redesigned Top Bar with Integrated Toolbar */}
-                <header className="h-14 border-b border-slate-200 dark:border-slate-800 flex items-center px-6 justify-between bg-white/95 dark:bg-slate-900/95 sticky top-0 z-20 backdrop-blur-sm shrink-0 w-full">
-                    {/* Left side: Document Meta / Tags */}
-                    <div className="flex items-center min-w-0 flex-1">
-                        {onBack && (
-                            <button
-                                onClick={onBack}
-                                className="md:hidden mr-2 p-1.5 -ml-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 shrink-0"
-                            >
-                                <ChevronLeft className="w-5 h-5" />
-                            </button>
-                        )}
-                        <div className="min-w-0 flex-1 overflow-x-auto no-scrollbar">
-                            <NoteHeader note={note} onUpdateNote={onUpdateNote} />
-                        </div>
+            {/* Redesigned Top Bar with Integrated Toolbar */}
+            <header className="h-14 border-b border-slate-200 dark:border-slate-800 flex items-center px-6 justify-between bg-white/95 dark:bg-slate-900/95 sticky top-0 z-20 backdrop-blur-sm shrink-0 w-full">
+                {/* Left side: Document Meta / Tags */}
+                <div className="flex items-center min-w-0 flex-1">
+                    {onBack && (
+                        <button
+                            onClick={onBack}
+                            className="md:hidden mr-2 p-1.5 -ml-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 shrink-0"
+                        >
+                            <ChevronLeft className="w-5 h-5" />
+                        </button>
+                    )}
+                    <div className="min-w-0 flex-1 overflow-x-auto no-scrollbar">
+                        <NoteHeader note={note} onUpdateNote={onUpdateNote} />
                     </div>
-
-                    {/* Center: Minimalist Formatting Toolbar */}
-                    <div className="flex-shrink-0 ml-4 hidden md:block">
-                        <Toolbar editor={editor} />
-                    </div>
-                </header>
-
-                {/* Mobile toolbar */}
-                <div className="md:hidden border-b border-slate-200 dark:border-slate-800 p-2 flex justify-center bg-white/95 dark:bg-slate-900/95 shrink-0 sticky top-14 z-20 backdrop-blur-sm w-full">
-                    <Toolbar editor={editor} />
                 </div>
 
-                {/* Editor Content */}
+                {/* Center: Minimalist Formatting Toolbar */}
+                <div className="flex-shrink-0 ml-4 hidden md:block">
+                    <Toolbar editor={editor} />
+                </div>
+            </header>
+
+            {/* Mobile toolbar */}
+            <div className="md:hidden border-b border-slate-200 dark:border-slate-800 p-2 flex justify-center bg-white/95 dark:bg-slate-900/95 shrink-0 sticky top-14 z-20 backdrop-blur-sm w-full">
+                <Toolbar editor={editor} />
+            </div>
+            
+            {/* Scrollable Container (Editor Content Only) */}
+            <div className="flex-1 overflow-y-auto w-full flex flex-col relative">
                 <div className="max-w-4xl mx-auto p-8 lg:p-12 lg:pb-0 mt-4 flex-1 flex flex-col w-full">
                     <textarea
                         ref={titleRef}

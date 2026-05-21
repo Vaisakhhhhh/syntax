@@ -72,13 +72,13 @@ export default function NoteHeader({ note, onUpdateNote }: Props) {
             {note.tags.map(tag => (
                 <span
                     key={tag.value}
-                    className="px-2.5 py-1 rounded-full bg-slate-100 text-xs font-medium text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 flex items-center gap-1 group hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0"
+                    className="px-2.5 py-1 rounded-full bg-slate-100 text-xs font-medium text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 flex items-center gap-1 group md:hover:bg-slate-200 dark:md:hover:bg-slate-700 transition-colors shrink-0"
                 >
                     <Tag className="w-3 h-3 text-emerald-500" />
                     {tag.label}
                     <button
                         onClick={() => removeTag(tag.value)}
-                        className="opacity-100 md:opacity-0 md:group-hover:opacity-100 ml-1 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-opacity"
+                        className="opacity-100 md:opacity-0 md:group-hover:opacity-100 ml-1 text-slate-400 dark:text-slate-500 md:hover:text-red-500 dark:md:hover:text-red-400 transition-opacity"
                     >
                         <X className="w-3 h-3" />
                     </button>
@@ -113,7 +113,7 @@ export default function NoteHeader({ note, onUpdateNote }: Props) {
                         <button
                             type="submit"
                             onMouseDown={(e) => e.preventDefault()}
-                            className="text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-300 p-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0 flex md:hidden items-center justify-center"
+                            className="text-emerald-500 md:hover:text-emerald-600 dark:text-emerald-400 dark:md:hover:text-emerald-300 p-0.5 rounded-full md:hover:bg-slate-200 dark:md:hover:bg-slate-700 transition-colors shrink-0 flex md:hidden items-center justify-center"
                             title="Confirm tag"
                         >
                             <Check className="w-3.5 h-3.5" />
@@ -126,7 +126,7 @@ export default function NoteHeader({ note, onUpdateNote }: Props) {
             ) : note.tags.length < 5 && (
                 <button
                     onClick={() => setIsAddingTag(true)}
-                    className="px-2 py-1 rounded-full text-xs font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 cursor-pointer flex items-center gap-1 shrink-0"
+                    className="px-2 py-1 rounded-full text-xs font-medium text-slate-500 md:hover:text-slate-800 dark:md:hover:text-slate-300 cursor-pointer flex items-center gap-1 shrink-0"
                     title="Add Tag"
                 >
                     <PlusCircle className="w-4 h-4" /> Add tag
