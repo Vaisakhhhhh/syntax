@@ -34,7 +34,7 @@ function NotesSidebar({
     const { theme, toggleTheme } = useTheme();
 
     return (
-        <aside className="w-80 bg-slate-50 border-r border-slate-200 dark:bg-slate-850 dark:border-slate-800 flex flex-col z-20 shrink-0">
+        <aside className={`w-full md:w-80 bg-slate-50 border-r border-slate-200 dark:bg-slate-850 dark:border-slate-800 flex-col z-20 shrink-0 overflow-hidden ${activeNoteId ? "hidden md:flex" : "flex"}`}>
             {/* Sidebar Header */}
             <div className="p-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-2">

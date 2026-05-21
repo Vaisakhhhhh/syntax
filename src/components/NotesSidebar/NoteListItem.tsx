@@ -1,5 +1,5 @@
-import React from 'react';
-import { Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Trash2, X, Check } from 'lucide-react';
 import type { Note } from '../../types/note';
 import { getSpacedPlainText } from '../../utils/stringUtils';
 import { formatDate } from '../../utils/dateUtils';
@@ -12,6 +12,8 @@ type Props = {
 };
 
 function NoteListItem({ note, isActive, onSelectNote, onDeleteNote }: Props) {
+    const [isConfirming, setIsConfirming] = useState(false);
+
     // Plain text extraction with correct block element spacing
     const plainText = getSpacedPlainText(note.content);
     const previewText = plainText.length > 50 ? plainText.substring(0, 50) + '...' : plainText;
@@ -28,15 +30,41 @@ function NoteListItem({ note, isActive, onSelectNote, onDeleteNote }: Props) {
                 <h3 className={`font-medium truncate pr-4 ${isActive ? "text-emerald-700 dark:text-emerald-400" : "text-slate-800 dark:text-slate-200"}`}>
                     {note.title || "Untitled Note"}
                 </h3>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onDeleteNote(note.id);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-all shrink-0"
-                >
-                    <Trash2 className="w-4 h-4" />
-                </button>
+                {isConfirming ? (
+                    <div className="flex items-center gap-1.5 opacity-100 shrink-0">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsConfirming(false);
+                            }}
+                            className="p-1 rounded bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300 md:hover:bg-slate-300 dark:md:hover:bg-slate-600 transition-colors"
+                            title="Cancel"
+                        >
+                            <X className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDeleteNote(note.id);
+                            }}
+                            className="p-1 rounded bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 md:hover:bg-red-200 dark:md:hover:bg-red-800/60 transition-colors"
+                            title="Confirm Delete"
+                        >
+                            <Check className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
+                ) : (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsConfirming(true);
+                        }}
+                        className="opacity-100 md:opacity-0 md:group-hover:opacity-100 text-slate-400 md:hover:text-red-500 dark:text-slate-500 dark:md:hover:text-red-400 transition-all shrink-0"
+                        title="Delete Note"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </button>
+                )}
             </div>
             <p className={`text-xs truncate ${isActive ? "text-slate-600 dark:text-slate-400" : "text-slate-500"}`}>
                 {previewText}
